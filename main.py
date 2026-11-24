@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
 app = FastAPI()
@@ -15,4 +15,6 @@ def health():
 
 @app.post("/ask")
 def ask(body: Question):
+    if not body.question.strip():
+        raise HTTPException(status_code= 400, detail="Question can not be empty")
     return {"question": body.question, "answer": "Placeholder answer"}
